@@ -1,0 +1,318 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Una invitación para la Commercial</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    font-family: Georgia, serif;
+    color: white;
+    background: radial-gradient(
+        ellipse at top,
+        #493047,
+        #211b29 60%,
+        #111018
+    );
+    overflow: hidden;
+}
+
+.card {
+    width: 100%;
+    max-width: 510px;
+    padding: 45px 25px;
+    text-align: center;
+    border: 1px solid rgba(230,190,220,.25);
+    border-radius: 25px;
+    background: rgba(30,24,35,.94);
+    box-shadow: 0 20px 60px rgba(0,0,0,.45);
+}
+
+.eyebrow {
+    color: #dcb6d4;
+    font: 600 11px Arial;
+    letter-spacing: 4px;
+}
+
+h1 {
+    font-size: 36px;
+    font-weight: normal;
+    line-height: 1.25;
+    margin: 25px 0 18px;
+}
+
+.description {
+    color: #e0d4df;
+    font: 15px/1.8 Arial;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 35px;
+}
+
+button {
+    border: none;
+    border-radius: 30px;
+    padding: 16px 23px;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+#yes {
+    background: #a64e87;
+    color: white;
+}
+
+#yes:hover {
+    background: #bd609b;
+    transform: scale(1.05);
+}
+
+#no {
+    background: #39343d;
+    color: white;
+}
+
+.hint {
+    color: #b5a4b3;
+    font: 12px Arial;
+    margin-top: 27px;
+}
+
+.hidden {
+    display: none;
+}
+
+.success h1 {
+    color: #e9b9dc;
+}
+
+.success p {
+    color: #eadde8;
+    font: 15px/1.8 Arial;
+}
+
+.success .final {
+    color: #f0c4e1;
+    font-size: 19px;
+    margin-top: 25px;
+}
+
+.confetti {
+    position: fixed;
+    top: -20px;
+    animation: fall 3s linear forwards;
+    pointer-events: none;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(110vh) rotate(720deg);
+        opacity: 0;
+    }
+}
+
+@media(max-width: 480px) {
+    h1 {
+        font-size: 30px;
+    }
+
+    .card {
+        padding: 35px 20px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="card" id="invitation">
+
+    <div class="eyebrow">
+        INVITACIÓN ESPECIAL
+    </div>
+
+    <h1>
+        Tengo una propuesta para ti... 😉
+    </h1>
+
+    <p class="description">
+        Este viernes tengo una misión especial:
+        <br><br>
+        Invitarte a compartir un momento diferente,
+        salir de la rutina y pasarla bastante bien.
+        <br><br>
+        ¿Te animas a aceptar esta invitación?
+        😏
+    </p>
+
+    <div class="buttons">
+
+        <button id="yes">
+            ¡Cuenta con ello! 🥂
+        </button>
+
+        <button id="no">
+            Me da miedo 🙈
+        </button>
+
+    </div>
+
+
+
+</div>
+
+
+<div class="card success hidden" id="success">
+
+    <div style="font-size:42px">
+        🥂 ✨
+    </div>
+
+    <div class="eyebrow">
+        RESPUESTA REGISTRADA
+    </div>
+
+    <h1>
+        ¡ESA ES LA ACTITUD! 😏
+    </h1>
+
+    <p>
+        Sabía que podía contar contigo mi Vale.
+    </p>
+
+    <p class="final">
+        Entonces nos vemos este viernes. 😉
+    </p>
+
+    <p>
+        Ahora solo falta ponernos de acuerdo
+        con los detalles. Te escribiré al interno jajaaja
+    </p>
+
+    <p>
+        ¡Prometo que valdrá la pena! 🥂
+    </p>
+
+</div>
+
+
+<script>
+
+const noButton = document.getElementById("no");
+const yesButton = document.getElementById("yes");
+
+const invitation = document.getElementById("invitation");
+const success = document.getElementById("success");
+const hint = document.getElementById("hint");
+
+const phrases = [
+    "¿Miedo a qué? ¡Si el plan está buenísimo! 😂",
+    "No hay motivos para asustarse... todavía. 😏",
+    "Ese botón no te va a ayudar. 🙈",
+    "Creo que el destino tiene otros planes...",
+    "¡Inténtalo de nuevo! Pero piénsalo bien. 😂",
+    "El viernes podría ser memorable... 🥂"
+];
+
+let attempts = 0;
+
+function moveNo() {
+
+    const width = noButton.offsetWidth;
+    const height = noButton.offsetHeight;
+
+    const maxX = Math.max(10, window.innerWidth - width - 20);
+    const maxY = Math.max(10, window.innerHeight - height - 20);
+
+    const x = Math.random() * maxX + 10;
+    const y = Math.random() * maxY + 10;
+
+    noButton.style.position = "fixed";
+    noButton.style.left = x + "px";
+    noButton.style.top = y + "px";
+    noButton.style.zIndex = "100";
+
+    hint.textContent =
+        phrases[attempts % phrases.length];
+
+    attempts++;
+}
+
+// Computador
+noButton.addEventListener("pointerenter", function() {
+    if (attempts < 2) {
+        moveNo();
+    }
+});
+
+// Celular y clic
+noButton.addEventListener("pointerdown", function(event) {
+    event.preventDefault();
+    moveNo();
+});
+
+noButton.addEventListener("click", function(event) {
+    event.preventDefault();
+    moveNo();
+});
+
+function celebrate() {
+
+    invitation.classList.add("hidden");
+    success.classList.remove("hidden");
+
+    const symbols = ["✦", "♥", "✧", "🥂"];
+
+    for (let i = 0; i < 70; i++) {
+
+        const confetti = document.createElement("span");
+
+        confetti.className = "confetti";
+
+        confetti.textContent =
+            symbols[Math.floor(Math.random() * symbols.length)];
+
+        confetti.style.left =
+            Math.random() * 100 + "vw";
+
+        confetti.style.animationDelay =
+            Math.random() + "s";
+
+        confetti.style.color = [
+            "#f3b8ce",
+            "#dca3bb",
+            "#e8d7a8",
+            "#ffffff"
+        ][Math.floor(Math.random() * 4)];
+
+        document.body.appendChild(confetti);
+
+        setTimeout(() => confetti.remove(), 4000);
+    }
+}
+
+yesButton.addEventListener("click", celebrate);
+
+</script>
+
+</body>
+</html>
